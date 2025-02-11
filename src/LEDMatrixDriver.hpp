@@ -20,6 +20,7 @@
 #define LEDMATRIXDRIVER_H_
 
 #include <SPI.h>
+#include <Arduino.h>
 
 #ifdef ESP32
 #include <cstring>
@@ -48,7 +49,7 @@ class LEDMatrixDriver
 		//with N segments and ssPin as SS,
 		//flags describe segment orientation (optional)
 		//an already allocated buffer can be provided as well (optional)
-		LEDMatrixDriver(uint8_t N, uint8_t ssPin, uint8_t flags = 0, uint8_t* frameBuffer = nullptr);
+		LEDMatrixDriver(SPIClass& spi, uint8_t N, uint8_t ssPin, SPISettings spiSettings = SPISettings(5000000, MSBFIRST, SPI_MODE0), uint8_t flags = 0, uint8_t* frameBuffer = nullptr);
 		#ifdef USE_ADAFRUIT_GFX
 		virtual
 		#endif
@@ -116,6 +117,7 @@ class LEDMatrixDriver
 		void _displayRow(uint8_t row);
 
 		const uint8_t N;
+		SPIClass& spi;
 		SPISettings spiSettings;
 		uint8_t flags;
 		uint8_t* frameBuffer;
